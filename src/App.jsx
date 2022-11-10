@@ -6,14 +6,21 @@ import { Card } from './Card'
 
 function App() {
   const [nome, setNome] = useState('')
-  const [cor, setCor] = useState('')
+  const [hex, setHex] = useState('')
+  const [erro, setErro] = useState(false)
 
-  const [cores, setCores] = useState([{ nome: 'azul' }])
+  const [cores, setCores] = useState([])
 
   function adicionaCor(e) {
     e.preventDefault()
+    if (nome.length < 3) {
+      setErro(true)
+      return
+    }
+    setErro(false)
     const novaCor = {
-      nome: nome
+      nome,
+      hex
     }
     setCores([...cores, novaCor])
     setNome('')
@@ -21,11 +28,10 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Checkpoint 01 - Front-end 3 - Daniel Nascimento</h1>
-      <form onSubmit={adicionaCor} className="form-add-cor">
-        <h2>ADICIONAR NOVA COR</h2>
+      <form onSubmit={adicionaCor} className={erro ? 'erro' : 'form-add-cor'}>
+        <h2 className="form-title">ADICIONAR NOVA COR</h2>
         <div className="inputs">
-          <div>
+          <div className="input-nome">
             <label htmlFor="nome">Nome</label>
             <input
               id="nome"
@@ -35,19 +41,31 @@ function App() {
             />
           </div>
 
-          <div>
+          <div className="input-cor">
             <label htmlFor="cor">Cor</label>
-            <input id="cor" type="color" />
+            <input
+              id="cor"
+              type="color"
+              value={hex}
+              onChange={event => setHex(event.target.value)}
+            />
           </div>
         </div>
-        <button>ADICIONAR</button>
+        <div className="posicao-botao">
+          <button className="botao">ADICIONAR</button>
+        </div>
       </form>
+      {erro ? (
+        <small>Por favor, verifique os dados inseridos no formulário</small>
+      ) : null}
 
-      <section>
+      <section className="container-cores">
         <h2>CORES FAVORITAS</h2>
-        {cores.map((cor, index) => {
-          return <Card key={index} nomeCor={cor} />
-        })}
+        <div className="cards">
+          {cores.map((cor, index) => {
+            return <Card key={index} nomeCor={cor} />
+          })}
+        </div>
       </section>
     </div>
   )
