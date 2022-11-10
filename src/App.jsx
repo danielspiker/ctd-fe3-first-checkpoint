@@ -13,7 +13,7 @@ function App() {
 
   function adicionaCor(e) {
     e.preventDefault()
-    if (nome.length < 3) {
+    if (nome.length < 3 || nome[0] == ' ') {
       setErro(true)
       return
     }
